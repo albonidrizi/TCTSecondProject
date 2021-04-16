@@ -20,14 +20,16 @@ public class DeviceAttributeController {
 
     @Autowired
     private DeviceAttributeRepository deviceAttributeRepository;
+    @Autowired
+    private DeviceRepository deviceRepository;
 
-    @GetMapping("/devices/{devicesId}/attributes")
-    public FindAll<DeviceAttribute> getDeviceAttributes(@PathVariable Integer deviceId){
+    @GetMapping("/devices/{deviceId}/attributes")
+    public FindAll<DeviceAttribute> getDeviceAttributes(@PathVariable Integer deviceId) {
+        Device device = deviceRepository.getOne(deviceId);
+        List<DeviceAttribute> attributes = deviceAttributeRepository.findByDevice(device);
 
-        Device device= DeviceRepository.getOne(deviceId);
-        List<Device> devices = deviceAttributeRepository.findByDevice(device);
-
-        List<DeviceAttribute> all = new FindAll<D>();
+        FindAll<DeviceAttribute> all = new FindAll<>();
+        all.setItems(attributes);
         return all;
     }
 

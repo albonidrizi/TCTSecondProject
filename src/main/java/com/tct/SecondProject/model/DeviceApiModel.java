@@ -1,26 +1,25 @@
 package com.tct.SecondProject.model;
 
-public class DiviceApiModel {
-
+public class DeviceApiModel {
 
     private Integer id;
-    private  String name;
-    private  Boolean isOn;
+    private String name;
+    private Boolean isOn;
     private Integer roomId;
 
-    public void DeviceApiModel(){ }
+    public DeviceApiModel() {}
 
-    public DiviceApiModel(Device divice){
-        this.id = divice.getId();
-        this.name = divice.getName();
-        this.isOn = divice.getIsOn();
-        this.roomId = divice.getRoomId();
+    public DeviceApiModel(Device device) {
+        this.id = device.getId();
+        this.name = device.getName();
+        this.isOn = device.getIsOn();
+        this.roomId = device.getRoom().getId();
     }
-
 
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -28,13 +27,15 @@ public class DiviceApiModel {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public Boolean getOn() {
+    public Boolean getIsOn() {
         return isOn;
     }
+
     public void setOn(Boolean on) {
         isOn = on;
     }
@@ -42,8 +43,8 @@ public class DiviceApiModel {
     public Integer getRoomId() {
         return roomId;
     }
+
     public void setRoomId(Integer roomId) {
-        this.roomId = roomId; }
-
-
+        this.roomId = roomId;
+    }
 }

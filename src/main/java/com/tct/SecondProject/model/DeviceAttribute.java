@@ -12,10 +12,8 @@ public class DeviceAttribute {
     private Integer minValue;
     private Integer currentValue;
     private Integer maxValue;
-
     @ManyToOne
     private Device device;
-
 
     public Integer getId() {
         return id;

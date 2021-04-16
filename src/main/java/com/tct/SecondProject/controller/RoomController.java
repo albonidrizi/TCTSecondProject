@@ -1,27 +1,35 @@
 package com.tct.SecondProject.controller;
 
-import com.tct.SecondProject.model.AllRooms;
+import com.tct.SecondProject.model.FindAll;
 import com.tct.SecondProject.model.Room;
 import com.tct.SecondProject.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class RoomControler {
+public class RoomController {
 
     @Autowired
     private RoomRepository roomRepository;
 
-    @GetMapping("/value")
-    public AllRooms getAll(){
-        AllRooms allRooms = new AllRooms();
+    @GetMapping("/rooms")
+    public FindAll<Room> getAll() {
+        FindAll<Room> allRooms = new FindAll<>();
         List<Room> rooms = roomRepository.findAll();
-     return allRooms;
+
+        allRooms.setItems(rooms);
+        return allRooms;
     }
 
+
+    @PostMapping("/rooms")
+    public void createRoom(@RequestBody Room room) {
+        roomRepository.save(room);
+    }
 
 }

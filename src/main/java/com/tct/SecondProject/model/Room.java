@@ -1,20 +1,31 @@
 package com.tct.SecondProject.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Room {
 
     @Id
-    private Integer id ;
+    @GeneratedValue
+    private Integer id;
+    private String name;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+
     public Integer getId() {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

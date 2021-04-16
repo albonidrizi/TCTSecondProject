@@ -1,21 +1,25 @@
 package com.tct.SecondProject.model;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class Device {
 
     @Id
     @GeneratedValue
     private Integer id;
-    private  String name;
-    private  Boolean isOn;
-    private Integer roomId;
-
+    private String name;
+    private Boolean isOn;
+    @ManyToOne
+    private Room room;
 
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -23,6 +27,7 @@ public class Device {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -30,14 +35,16 @@ public class Device {
     public Boolean getIsOn() {
         return isOn;
     }
-    public void setIsOn(Boolean on) {
+
+    public void setOn(Boolean on) {
         isOn = on;
     }
 
-    public Integer getRoomId() {
-        return roomId;
+    public Room getRoom() {
+        return room;
     }
-    public void setRoomId(Integer roomId) {
-        this.roomId = roomId;
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 }
