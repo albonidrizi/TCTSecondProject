@@ -1,5 +1,6 @@
 package com.tct.SecondProject.controller;
 
+import com.tct.SecondProject.model.AttributeApiModel;
 import com.tct.SecondProject.model.Device;
 import com.tct.SecondProject.model.DeviceAttribute;
 import com.tct.SecondProject.model.FindAll;
@@ -7,12 +8,11 @@ import com.tct.SecondProject.repository.DeviceAttributeRepository;
 import com.tct.SecondProject.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -24,13 +24,49 @@ public class DeviceAttributeController {
     private DeviceRepository deviceRepository;
 
     @GetMapping("/devices/{deviceId}/attributes")
-    public FindAll<DeviceAttribute> getDeviceAttributes(@PathVariable Integer deviceId) {
-        Device device = deviceRepository.getOne(deviceId);
+    public FindAll<AttributeApiModel> getDeviceAttributes(@PathVariable Integer deviceId) {
+        Optional<Device> optional = deviceRepository.findById(deviceId);
+        Device device = optional.get();
         List<DeviceAttribute> attributes = deviceAttributeRepository.findByDevice(device);
+        List<AttributeApiModel> models = attributes.stream()
+                .map(AttributeApiModel::new)
+                .collect(Collectors.toList());
 
-        FindAll<DeviceAttribute> all = new FindAll<>();
-        all.setItems(attributes);
+        FindAll<AttributeApiModel> all = new FindAll<>();
+        all.setItems(models);
         return all;
+    }
+
+    @PostMapping("/devices/{deviceId}/attributes")
+    public void createAttribute(@PathVariable Integer deviceId, @RequestBody AttributeApiModel model) {
+        Device device = deviceRepository.getOne(deviceId);
+
+        DeviceAttribute deviceAttribute = new DeviceAttribute();
+        deviceAttribute.setName(model.getName());
+        deviceAttribute.setCurrentValue(model.getCurrentValue());
+        deviceAttribute.setMinValue(model.getMinValue());
+        deviceAttribute.setMaxValue(model.getMaxValue());
+        deviceAttribute.setDevice(device);
+
+        deviceAttributeRepository.save(deviceAttribute);
+    }
+
+    @PutMapping("/devices/{deviceId}/attributes/{attributeId}")
+    public void updateAttribute(@PathVariable Integer deviceId,
+                                @PathVariable Integer attributeId,
+                                @RequestBody AttributeApiModel apiModel) {
+        DeviceAttribute attribute = deviceAttributeRepository.getOne(attributeId);
+        attribute.setName(apiModel.getName());
+        attribute.setCurrentValue(apiModel.getCurrentValue());
+        attribute.setMinValue(apiModel.getMinValue());
+        attribute.setMaxValue(apiModel.getMaxValue());
+
+        deviceAttributeRepository.save(attribute);
+    }
+
+    @DeleteMapping("/devices/{deviceId}/attributes/{attributeId}")
+    public void deleteAttribute(@PathVariable Integer attributeId) {
+        deviceAttributeRepository.deleteById(attributeId);
     }
 
 }
