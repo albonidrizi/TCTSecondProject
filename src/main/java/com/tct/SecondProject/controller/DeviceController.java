@@ -7,6 +7,10 @@ import com.tct.SecondProject.model.Room;
 import com.tct.SecondProject.repository.DeviceRepository;
 import com.tct.SecondProject.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,15 +26,21 @@ public class DeviceController {
     private RoomRepository roomRepository;
 
     @GetMapping("/devices")
-    public FindAll<DeviceApiModel> findAll() {
+    public FindAll<DeviceApiModel> findAll(@RequestParam(required = false , defaultValue = "0") Integer pageNumber,
+                                           @RequestParam(required = false , defaultValue = "5" ) Integer pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNumber , pageSize);
+
         FindAll<DeviceApiModel> response = new FindAll<>();
-        List<Device> devices = deviceRepository.findAll();
+        Page<Device> devices = deviceRepository.findAll(pageable);
 
         List<DeviceApiModel> models = devices.stream()
                 .map(DeviceApiModel::new)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()) ;
 
         response.setItems(models);
+        response.setPage(pageNumber);
+        response.setTotal((int) deviceRepository.count());
         return response;
     }
 

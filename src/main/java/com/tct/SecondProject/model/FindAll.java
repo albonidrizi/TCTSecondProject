@@ -5,7 +5,7 @@ import java.util.List;
 public class FindAll<T> {
 
     private List<T> items;
-    private int total;
+    private long total;
     private int page;
 
     public List<T> getItems() {
@@ -16,7 +16,7 @@ public class FindAll<T> {
         this.items = items;
     }
 
-    public int getTotal() {
+    public long getTotal() {
         return total;
     }
 
